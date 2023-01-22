@@ -1,5 +1,5 @@
 import uuid
-
+import json
 from django.http import JsonResponse, Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -89,13 +89,14 @@ def get_user_employee_infos(user_id: int):
 
 @csrf_exempt
 def login_view(request):
+    data = json.loads(request.body)
     query = '''
     SELECT *
     FROM public.user
     WHERE username='%s' AND password='%s';
     ''' % (
-        request.POST. get('username'),
-        request.POST.get('password'),
+        data.get('username'),
+        data.get('password'),
     )
     with connection.cursor() as cursor:
         try:
