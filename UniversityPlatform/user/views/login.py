@@ -102,8 +102,11 @@ def login_view(request):
         try:
             cursor.execute(query)
             user = [dict((cursor.description[i][0], value) \
-                        for i, value in enumerate(row)) for row in cursor.fetchall()][0]
+                        for i, value in enumerate(row)) for row in cursor.fetchall()]
+            print(user)
+            user = user[0]
         except Exception as ex:
+            print(ex)
             return JsonResponse({}, status=400)
     user_id = user['id']
     print(user_id)
