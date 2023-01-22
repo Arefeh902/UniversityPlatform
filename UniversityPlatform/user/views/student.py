@@ -90,7 +90,7 @@ def create_practice_exam_request_view(request, student_id, section_id):
             cursor.execute(query)
         except Exception as ex:
             return JsonResponse({'result': False, 'errors': [str(ex)]}, safe=False,
-                                json_dumps_params={'ensure_ascii': False})
+                                json_dumps_params={'ensure_ascii': False}, status=400)
 
     return JsonResponse(safe=False, json_dumps_params={'ensure_ascii': False})
 

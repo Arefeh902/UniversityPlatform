@@ -12,10 +12,7 @@ def run_query(cursor):
                               for i, value in enumerate(row)) for row in cursor.fetchall()]
 
 
-def get_user_id_by_token(req_meta):
-    if not 'HTTP_AUTHORIZATION' in req_meta:
-        return None
-    token = req_meta['HTTP_AUTHORIZATION']
+def get_user_id_by_token(token):
     query = '''
     SELECT *
     FROM public.user
@@ -50,8 +47,7 @@ def get_user_student_infos(user_id: int):
             fetch_res = [dict((cursor.description[i][0], value) \
                         for i, value in enumerate(row)) for row in cursor.fetchall()]
         except Exception as ex:
-            return JsonResponse({'result': False, 'errors': [str(ex)]}, safe=False,
-                                 json_dumps_params={'ensure_ascii': False})
+            return JsonResponse({}, status=400)
     return fetch_res
 
 
@@ -69,8 +65,7 @@ def get_user_teacher_infos(user_id: int):
             fetch_res = [dict((cursor.description[i][0], value) \
                         for i, value in enumerate(row)) for row in cursor.fetchall()]
         except Exception as ex:
-            return JsonResponse({'result': False, 'errors': [str(ex)]}, safe=False,
-                                 json_dumps_params={'ensure_ascii': False})
+            return JsonResponse({}, status=400)
     return fetch_res
 
 
@@ -88,8 +83,7 @@ def get_user_employee_infos(user_id: int):
             fetch_res = [dict((cursor.description[i][0], value) \
                         for i, value in enumerate(row)) for row in cursor.fetchall()]
         except Exception as ex:
-            return JsonResponse({'result': False, 'errors': [str(ex)]}, safe=False,
-                                 json_dumps_params={'ensure_ascii': False})
+            return JsonResponse({}, status=400)
     return fetch_res
 
 
@@ -109,8 +103,7 @@ def login_view(request):
             user = [dict((cursor.description[i][0], value) \
                         for i, value in enumerate(row)) for row in cursor.fetchall()][0]
         except Exception as ex:
-            return JsonResponse({'result': False, 'errors': [str(ex)]}, safe=False,
-                                json_dumps_params={'ensure_ascii': False})
+            return JsonResponse({}, status=400)
     user_id = user['id']
     print(user_id)
     token = uuid.uuid4()
@@ -124,8 +117,7 @@ def login_view(request):
         try:
             cursor.execute(query)
         except Exception as ex:
-            return JsonResponse({'result': False, 'errors': [str(ex)]}, safe=False,
-                                json_dumps_params={'ensure_ascii': False})
+            return JsonResponse({}, status=400)
     response_data = user
     response_data['token'] = token
     response_data['student_infos'] = get_user_student_infos(user_id)
