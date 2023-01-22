@@ -7,6 +7,11 @@ from django.db import connection
 from django.views.decorators.csrf import csrf_exempt
 
 
+def run_query(cursor):
+    return [dict((cursor.description[i][0], value) \
+                              for i, value in enumerate(row)) for row in cursor.fetchall()]
+
+
 def get_user_id_by_token(req_meta):
     if not 'HTTP_AUTHORIZATION' in req_meta:
         return None
@@ -90,7 +95,6 @@ def get_user_employee_infos(user_id: int):
 
 @csrf_exempt
 def login_view(request):
-    print(request.POST)
     query = '''
     SELECT *
     FROM public.user
@@ -127,6 +131,5 @@ def login_view(request):
     response_data['student_infos'] = get_user_student_infos(user_id)
     response_data['teacher_infos'] = get_user_teacher_infos(user_id)
     response_data['employee_infos'] = get_user_employee_infos(user_id)
-    print(response_data)
     return JsonResponse(response_data, safe=False, json_dumps_params={'ensure_ascii': False})
 
