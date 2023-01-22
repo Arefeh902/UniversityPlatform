@@ -29,8 +29,7 @@ def check_valid_student(token, student_id):
             fetch_res = [dict((cursor.description[i][0], value) \
                         for i, value in enumerate(row)) for row in cursor.fetchall()]
         except Exception as ex:
-            return JsonResponse({'result': False, 'errors': [str(ex)]}, safe=False,
-                                 json_dumps_params={'ensure_ascii': False})
+            return JsonResponse({}, status=400)
     return fetch_res
 
 
@@ -48,8 +47,7 @@ def get_student_term_view(request, student_id):
             cursor.execute(query)
             student_terms = get_results(cursor)
         except Exception as ex:
-            return JsonResponse({'result': False, 'errors': [str(ex)]}, safe=False,
-                                json_dumps_params={'ensure_ascii': False})
+            return JsonResponse({}, status=400)
 
     return JsonResponse(student_terms, safe=False, json_dumps_params={'ensure_ascii': False})
 
@@ -69,8 +67,7 @@ def get_student_section_view(request, student_id, section_id):
             cursor.execute(query)
             student_sections = get_results(cursor)
         except Exception as ex:
-            return JsonResponse({'result': False, 'errors': [str(ex)]}, safe=False,
-                                json_dumps_params={'ensure_ascii': False})
+            return JsonResponse({}, status=400)
 
     return JsonResponse(student_sections, safe=False, json_dumps_params={'ensure_ascii': False})
 
@@ -89,8 +86,7 @@ def create_practice_exam_request_view(request, student_id, section_id):
         try:
             cursor.execute(query)
         except Exception as ex:
-            return JsonResponse({'result': False, 'errors': [str(ex)]}, safe=False,
-                                json_dumps_params={'ensure_ascii': False}, status=400)
+            return JsonResponse({}, status=400)
 
     return JsonResponse(safe=False, json_dumps_params={'ensure_ascii': False})
 
