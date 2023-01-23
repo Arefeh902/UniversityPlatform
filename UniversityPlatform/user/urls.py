@@ -9,7 +9,8 @@ urlpatterns = [
 
    path('student/<int:student_id>/terms/', get_student_term_view, name='student_terms'),
    path('student/<int:student_id>/section/<int:term_id>/', get_student_section_view, name='student_term_section'),
-   path('student/<int:student_id>/practice-class-request/create/<int:section_id>/', create_practice_exam_request_view),
+   path('student/<int:student_id>/practice-class-request/create/<int:section_id>/', create_practice_class_request_view),
+   path('student/<int:student_id>/practice-class-request/<int:section_id>/', ),
    path('student/<int:student_id>/deadlines/<int:term_id>/', get_student_deadlines_view),
 
    path('teacher/<int:teacher_id>/terms/', get_teacher_terms_view),

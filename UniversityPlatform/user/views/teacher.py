@@ -69,3 +69,18 @@ def get_teacher_section_view(request, teacher_id, term_id):
     return JsonResponse(teacher_sections)
 
 
+@csrf_exempt
+def get_teacher_advisees_view(request, teacher_id):
+    query = '''
+        SELECT * FROM student WHERE advisor_id=%d;
+        ''' % (
+        teacher_id,
+    )
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(query)
+            students = get_results(cursor)
+        except Exception as ex:
+            return JsonResponse({}, status=400)
+
+    return JsonResponse(students)

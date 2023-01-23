@@ -74,7 +74,7 @@ def get_student_section_view(request, student_id, term_id):
 
 
 @csrf_exempt
-def create_practice_exam_request_view(request, student_id, section_id):
+def create_practice_class_request_view(request, student_id, section_id):
     query = '''
     INSERT INTO practice_class_request (student_id, section_id, status\
                 VALUES (%d, %d, %s);
@@ -86,11 +86,30 @@ def create_practice_exam_request_view(request, student_id, section_id):
     with connection.cursor() as cursor:
         try:
             cursor.execute(query)
-            student_sections = get_results(cursor)
         except Exception as ex:
             return JsonResponse({}, status=400)
 
     return JsonResponse(safe=False)
+
+
+@csrf_exempt
+def get_practice_class_request_view(request, student_id, section_id):
+    query = '''
+        SELECT * 
+        FROM practice_class_request
+        WHERE student_id=%d AND section_id=%d;
+        ''' % (
+        student_id,
+        section_id,
+    )
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(query)
+            student_requests = get_results(cursor)
+        except Exception as ex:
+            return JsonResponse({}, status=400)
+
+    return JsonResponse(student_requests, safe=False)
 
 
 @csrf_exempt
