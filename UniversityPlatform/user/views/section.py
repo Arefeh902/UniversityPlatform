@@ -78,8 +78,8 @@ def get_section_detail_view(request, section_id):
 def get_section_students(request, section_id):
     query = '''
             SELECT * 
-            FROM practice_class_request JOIN student ON practice_class_request.student_id=student.sid
-            WHERE section_id=%d;
+            FROM student__section JOIN student ON student__section.student_id=student.sid
+            WHERE section_id=%d
             ''' % (
         section_id
     )
