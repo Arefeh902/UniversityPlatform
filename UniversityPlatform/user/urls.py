@@ -5,7 +5,7 @@ from .views.section import *
 from .views.teacher import *
 
 urlpatterns = [
-   path('login/', login_view, name='login'),
+   path('user/login/', login_view, name='login'),
 
    path('student/<int:student_id>/terms/', get_student_term_view, name='student_terms'),
    path('student/<int:student_id>/section/<int:term_id>/', get_student_section_view, name='student_term_section'),

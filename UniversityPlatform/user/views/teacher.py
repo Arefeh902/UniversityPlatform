@@ -90,4 +90,3 @@ def get_teacher_advisees_view(request, teacher_id):
 @csrf_exempt
 def create_exam_poll(request):
     pass
-
