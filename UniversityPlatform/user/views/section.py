@@ -75,7 +75,7 @@ def get_section_detail_view(request, section_id):
 
 
 @csrf_exempt
-def get_section_students(request, section_id):
+def get_section_students_view(request, section_id):
     query = '''
             SELECT * 
             FROM student__section JOIN student ON student__section.student_id=student.sid
@@ -132,7 +132,7 @@ def set_practice_class_request_status_view(request, request_id):
 
 
 @csrf_exempt
-def create_exam_poll(request, section_id):
+def create_exam_poll_view(request, section_id):
     data = json.loads(request.body)
     query = '''
         INSERT INTO exam_poll 

@@ -1,8 +1,4 @@
-import uuid
-
-from django.http import JsonResponse, Http404
-from django.shortcuts import render, redirect
-from django.urls import reverse
+from django.http import JsonResponse
 from django.db import connection
 from django.views.decorators.csrf import csrf_exempt
 from .login import get_user_id_by_token
@@ -90,7 +86,7 @@ def create_practice_class_request_view(request, student_id, section_id):
         except Exception as ex:
             return JsonResponse({}, status=400)
 
-    return JsonResponse(safe=False)
+    return JsonResponse({}, safe=False)
 
 
 @csrf_exempt
@@ -133,3 +129,8 @@ def get_student_deadlines_view(request, student_id, term_id):
         except Exception as ex:
             return JsonResponse({}, safe=False, status=400)
     return JsonResponse(student_deadlines, safe=False)
+
+
+@csrf_exempt
+def answer_poll_view(request, student_id):
+    pass

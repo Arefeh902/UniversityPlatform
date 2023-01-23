@@ -3,6 +3,8 @@ from .views.login import login_view
 from .views.student import *
 from .views.section import *
 from .views.teacher import *
+from .views.course_registration import *
+
 
 urlpatterns = [
    path('user/login/', login_view, name='login'),
@@ -20,6 +22,9 @@ urlpatterns = [
    path('section/<int:section_id>/detail/', get_section_detail_view),
    path('section/<int:section_id>/practice-class-request/all/', get_section_practice_class_request_view),
    path('section/<int:section_id>/practice-class-request/set-status/', set_practice_class_request_status_view),
-   path('section/<int:section_id>/students/', get_section_students),
-   path('section/<int:section_id>/create-exam-poll/', create_exam_poll),
+   path('section/<int:section_id>/students/', get_section_students_view),
+   path('section/<int:section_id>/create-exam-poll/', create_exam_poll_view),
+
+   path('department/all', get_all_departments),
+   path('section/<int:term_id>/<str:department>/all', get_all_sections_of_departments_in_term),
 ]
