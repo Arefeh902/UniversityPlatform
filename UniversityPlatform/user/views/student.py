@@ -49,7 +49,7 @@ def get_student_term_view(request, student_id):
         except Exception as ex:
             return JsonResponse({}, status=400)
 
-    return JsonResponse(student_terms, safe=False, json_dumps_params={'ensure_ascii': False})
+    return JsonResponse(student_terms)
 
 
 @csrf_exempt
@@ -69,7 +69,7 @@ def get_student_section_view(request, student_id, term_id):
         except Exception as ex:
             return JsonResponse({}, status=400)
 
-    return JsonResponse(student_sections, safe=False, json_dumps_params={'ensure_ascii': False})
+    return JsonResponse(student_sections)
 
 
 @csrf_exempt

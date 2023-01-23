@@ -42,7 +42,7 @@ def get_section_detail_view(request, section_id):
             return JsonResponse({}, status=400)
     query = '''
     SELECT *
-    FROM teacher_section
+    FROM teacher__section
     WHERE section_id=%d;
     ''' % (
         section_id,
@@ -71,4 +71,4 @@ def get_section_detail_view(request, section_id):
     response_data['course'] = course_detail
     response_data['teachers'] = teachers
     response_data['times'] = times
-    return JsonResponse(response_data, safe=False, json_dumps_params={'ensure_ascii': False})
+    return JsonResponse(response_data)
