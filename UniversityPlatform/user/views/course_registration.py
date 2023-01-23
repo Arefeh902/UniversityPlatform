@@ -43,3 +43,12 @@ def get_all_sections_of_departments_in_term(request, term_id, department):
 
     return JsonResponse(sections, safe=False)
 
+
+@csrf_exempt
+def select_section(request, student_id, section_id):
+    pass
+
+
+@csrf_exempt
+def delete_section(request, student_section_id):
+    pass

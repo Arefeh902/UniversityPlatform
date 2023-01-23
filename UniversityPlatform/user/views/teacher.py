@@ -85,3 +85,21 @@ def get_teacher_advisees_view(request, teacher_id):
             return JsonResponse({}, status=400)
 
     return JsonResponse(students, safe=False)
+
+
+@csrf_exempt
+def approve_course_registration(request, student_section_id):
+    query = '''
+            UPDATE student__section 
+            SET is_approved=true 
+            WHERE id=%s;
+            ''' % (
+            student_section_id
+          )
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(query)
+        except Exception as ex:
+            return JsonResponse({}, status=400)
+
+    return JsonResponse({}, safe=False)
