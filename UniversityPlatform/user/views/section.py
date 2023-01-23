@@ -71,7 +71,7 @@ def get_section_detail_view(request, section_id):
     response_data['course'] = course_detail
     response_data['teachers'] = teachers
     response_data['times'] = times
-    return JsonResponse(response_data, safe=True)
+    return JsonResponse(response_data)
 
 
 @csrf_exempt
@@ -79,8 +79,7 @@ def get_section_students(request, section_id):
     query = '''
             SELECT * 
             FROM student__section JOIN student ON student__section.student_id=student.sid
-            JOIN public.user ON public.user.id = student.user_id
-            WHERE student__section.section_id=%d
+            WHERE section_id=%d
             ''' % (
         section_id
     )
@@ -91,7 +90,7 @@ def get_section_students(request, section_id):
         except Exception as ex:
             return JsonResponse({}, status=400)
 
-    return JsonResponse(requests, safe=False)
+    return JsonResponse(requests)
 
 
 @csrf_exempt

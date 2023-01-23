@@ -37,7 +37,7 @@ def get_teacher_terms_view(request, teacher_id):
     WHERE teacher_id=%d)
     ORDER BY term.start_date DESC;
     ''' % (
-        teacher_id,
+        teacher_id
     )
     with connection.cursor() as cursor:
         try:
@@ -73,7 +73,7 @@ def get_teacher_section_view(request, teacher_id, term_id):
 def get_teacher_advisees_view(request, teacher_id):
     query = '''
         SELECT * FROM student WHERE advisor_id=%d
-        ORDER BY desc;
+        ORDER BY sid DESC;
         ''' % (
         teacher_id,
     )
