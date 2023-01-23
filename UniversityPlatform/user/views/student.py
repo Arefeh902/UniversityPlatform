@@ -89,13 +89,14 @@ def create_practice_exam_request_view(request, student_id, section_id):
         except Exception as ex:
             return JsonResponse({}, status=400)
 
-    return JsonResponse()
+    return JsonResponse(safe=False)
 
 
 @csrf_exempt
 def get_student_deadlines_view(request, student_id, term_id):
     query = '''
-    SELECT * FROM exam JOIN section ON exam.section_id=section.id JOIN course ON section.course_id=course.id
+    SELECT course.id as course_id, course.name as course_name, exam.*  
+    FROM exam JOIN section ON exam.section_id=section.id JOIN course ON section.course_id=course.id
     WHERE exam.section_id IN     
     (SELECT section_id
     FROM student__section JOIN section ON student__section.section_id=section.id
@@ -109,5 +110,5 @@ def get_student_deadlines_view(request, student_id, term_id):
             cursor.execute(query)
             student_deadlines = get_results(cursor)
         except Exception as ex:
-            return JsonResponse({}, status=400)
-    return JsonResponse(student_deadlines)
+            return JsonResponse({}, safe=False, status=400)
+    return JsonResponse(student_deadlines, safe=False)
