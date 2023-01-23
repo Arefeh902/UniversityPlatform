@@ -130,14 +130,30 @@ def set_practice_class_request_status_view(request, request_id):
 
     return JsonResponse(safe=False)
 
-# get resume
-'''
-student_id int
-section_id int
 
-SELECT section.*, 
-FROM student__section JOIN section ON student__section.section_id=section.id
-WHERE student__section.student_id=student_id AND section.course=(
-SELECT course_id FROM section WHERE id=section_id
-);
-'''
+@csrf_exempt
+def create_exam_poll(request, section_id):
+    data = json.loads(request.body)
+    query = '''
+        INSERT INTO exam_poll 
+        (start_at, end_at, section_id, type, title) 
+        VALUES (%s, %s, %s, %s, %s)
+        ''' % (
+            data.get('start_at'),
+            data.get('end_at'),
+            section_id,
+            data.get('type'),
+            data.get('title')
+        )
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(query)
+        except Exception as ex:
+            return JsonResponse({}, status=400)
+
+    return JsonResponse({}, safe=False)
+
+
+@csrf_exempt
+def add_poll_option(request, exam_poll_id):
+    pass
