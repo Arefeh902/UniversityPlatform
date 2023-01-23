@@ -2,7 +2,7 @@ from django.http import JsonResponse, Http404
 from django.db import connection
 from django.views.decorators.csrf import csrf_exempt
 from .login import get_user_id_by_token
-
+import json
 
 def get_results(cursor):
     return [dict((cursor.description[i][0], value) \
@@ -88,5 +88,28 @@ def get_teacher_advisees_view(request, teacher_id):
 
 
 @csrf_exempt
-def create_exam_poll(request):
+def create_exam_poll(request, section_id):
+    data = json.loads(request.body)
+    query = '''
+        INSERT INTO exam_poll 
+        (start_at, end_at, section_id, type, title) 
+        VALUES (%s, %s, %s, %s, %s)
+        ''' % (
+            data.get('start_at'),
+            data.get('end_at'),
+            section_id,
+            data.get('type'),
+            data.get('title')
+        )
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(query)
+        except Exception as ex:
+            return JsonResponse({}, status=400)
+
+    return JsonResponse({}, safe=False)
+
+
+@csrf_exempt
+def add_poll_option(request, exam_poll_id):
     pass

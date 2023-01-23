@@ -130,3 +130,14 @@ def set_practice_class_request_status_view(request, request_id):
 
     return JsonResponse(safe=False)
 
+# get resume
+'''
+student_id int
+section_id int
+
+SELECT section.*, 
+FROM student__section JOIN section ON student__section.section_id=section.id
+WHERE student__section.student_id=student_id AND section.course=(
+SELECT course_id FROM section WHERE id=section_id
+);
+'''
