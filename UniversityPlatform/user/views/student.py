@@ -85,8 +85,29 @@ def create_practice_exam_request_view(request, student_id, section_id):
     with connection.cursor() as cursor:
         try:
             cursor.execute(query)
+            student_sections = get_results(cursor)
         except Exception as ex:
             return JsonResponse({}, status=400)
 
-    return JsonResponse(safe=False, json_dumps_params={'ensure_ascii': False})
+    return JsonResponse()
 
+
+@csrf_exempt
+def get_student_deadlines_view(request, student_id, term_id):
+    query = '''
+    SELECT * FROM exam JOIN section ON exam.section_id=section.id JOIN course ON section.course_id=course.id
+    WHERE exam.section_id IN     
+    (SELECT section_id
+    FROM student__section JOIN section ON student__section.section_id=section.id
+    WHERE student_id=%d AND term_id =%d);
+    ''' % (
+        student_id,
+        term_id
+    )
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(query)
+            student_deadlines = get_results(cursor)
+        except Exception as ex:
+            return JsonResponse({}, status=400)
+    return JsonResponse(student_deadlines)
