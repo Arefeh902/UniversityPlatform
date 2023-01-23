@@ -35,7 +35,7 @@ def get_teacher_terms_view(request, teacher_id):
     SELECT * FROM term WHERE id IN
     (SELECT section.term_id FROM teacher__section JOIN section ON teacher__section.section_id=section.id
     WHERE teacher_id=%d)
-    ORDER BY desc;
+    ORDER BY term.start_date DESC;
     ''' % (
         teacher_id,
     )
@@ -46,7 +46,7 @@ def get_teacher_terms_view(request, teacher_id):
         except Exception as ex:
             return JsonResponse({}, status=400)
 
-    return JsonResponse(teacher_terms)
+    return JsonResponse(teacher_terms, safe=False)
 
 
 @csrf_exempt
@@ -66,13 +66,14 @@ def get_teacher_section_view(request, teacher_id, term_id):
         except Exception as ex:
             return JsonResponse({}, status=400)
 
-    return JsonResponse(teacher_sections)
+    return JsonResponse(teacher_sections, safe=False)
 
 
 @csrf_exempt
 def get_teacher_advisees_view(request, teacher_id):
     query = '''
-        SELECT * FROM student WHERE advisor_id=%d;
+        SELECT * FROM student WHERE advisor_id=%d
+        ORDER BY desc;
         ''' % (
         teacher_id,
     )
@@ -83,4 +84,10 @@ def get_teacher_advisees_view(request, teacher_id):
         except Exception as ex:
             return JsonResponse({}, status=400)
 
-    return JsonResponse(students)
+    return JsonResponse(students, safe=False)
+
+
+@csrf_exempt
+def create_exam_poll(request):
+    pass
+

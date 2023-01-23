@@ -38,8 +38,8 @@ def get_student_term_view(request, student_id):
     query = '''
     SELECT *
     FROM student__term JOIN term ON student__term.term_id=term.id
-    WHERE student_id=%d
-    ORDER BY desc;
+    WHERE student__term.student_id=%d
+    ORDER BY term.start_date DESC;
     ''' % (
         student_id,
     )
@@ -50,7 +50,7 @@ def get_student_term_view(request, student_id):
         except Exception as ex:
             return JsonResponse({}, status=400)
 
-    return JsonResponse(student_terms)
+    return JsonResponse(student_terms, safe=False)
 
 
 @csrf_exempt
@@ -70,7 +70,7 @@ def get_student_section_view(request, student_id, term_id):
         except Exception as ex:
             return JsonResponse({}, status=400)
 
-    return JsonResponse(student_sections)
+    return JsonResponse(student_sections, safe=False)
 
 
 @csrf_exempt
