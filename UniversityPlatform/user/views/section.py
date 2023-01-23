@@ -79,7 +79,8 @@ def get_section_students(request, section_id):
     query = '''
             SELECT * 
             FROM student__section JOIN student ON student__section.student_id=student.sid
-            WHERE section_id=%d
+            JOIN public.user ON public.user.id = student.user_id
+            WHERE student__section.section_id=%d
             ''' % (
         section_id
     )
