@@ -38,7 +38,8 @@ def get_student_term_view(request, student_id):
     query = '''
     SELECT *
     FROM student__term JOIN term ON student__term.term_id=term.id
-    WHERE student_id=%d;
+    WHERE student_id=%d
+    ORDER BY desc;
     ''' % (
         student_id,
     )

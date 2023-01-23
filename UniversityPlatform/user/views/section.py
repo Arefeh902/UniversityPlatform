@@ -1,4 +1,4 @@
-import uuid
+import json
 
 from django.http import JsonResponse, Http404
 from django.shortcuts import render, redirect
@@ -72,3 +72,42 @@ def get_section_detail_view(request, section_id):
     response_data['teachers'] = teachers
     response_data['times'] = times
     return JsonResponse(response_data)
+
+
+@csrf_exempt
+def get_section_practice_class_request_view(request, section_id):
+    query = '''
+        SELECT * 
+        FROM practice_class_request JOIN student ON practice_class_request.student_id=student.sid
+        WHERE section_id=%d;
+        ''' % (
+        section_id
+    )
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(query)
+            requests = get_results(cursor)
+        except Exception as ex:
+            return JsonResponse({}, status=400)
+
+    return JsonResponse(requests)
+
+
+@csrf_exempt
+def set_practice_class_request_status_view(request, request_id):
+    data = json.loads(request.body)
+    query = '''
+        UPDATE practice_class_request 
+        SET status=%d WHERE id=%d;
+        ''' % (
+        data.get('status'),
+        request_id
+    )
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(query)
+        except Exception as ex:
+            return JsonResponse({}, status=400)
+
+    return JsonResponse()
+
