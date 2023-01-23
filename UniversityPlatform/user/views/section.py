@@ -75,12 +75,12 @@ def get_section_detail_view(request, section_id):
 
 
 @csrf_exempt
-def get_section_practice_class_request_view(request, section_id):
+def get_section_students(request, section_id):
     query = '''
-        SELECT * 
-        FROM practice_class_request JOIN student ON practice_class_request.student_id=student.sid
-        WHERE section_id=%d;
-        ''' % (
+            SELECT * 
+            FROM practice_class_request JOIN student ON practice_class_request.student_id=student.sid
+            WHERE section_id=%d;
+            ''' % (
         section_id
     )
     with connection.cursor() as cursor:
@@ -91,6 +91,25 @@ def get_section_practice_class_request_view(request, section_id):
             return JsonResponse({}, status=400)
 
     return JsonResponse(requests)
+
+
+@csrf_exempt
+def get_section_practice_class_request_view(request, section_id):
+    query = '''
+        SELECT * 
+        FROM student__section JOIN student ON student__section.student_id=student.sid
+        WHERE student__section.section_id=%d;
+        ''' % (
+        section_id
+    )
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(query)
+            students = get_results(cursor)
+        except Exception as ex:
+            return JsonResponse({}, status=400)
+
+    return JsonResponse(students, safe=False)
 
 
 @csrf_exempt
@@ -109,5 +128,5 @@ def set_practice_class_request_status_view(request, request_id):
         except Exception as ex:
             return JsonResponse({}, status=400)
 
-    return JsonResponse()
+    return JsonResponse(safe=False)
 
