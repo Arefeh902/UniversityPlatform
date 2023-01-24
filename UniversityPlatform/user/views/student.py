@@ -134,3 +134,15 @@ def get_student_deadlines_view(request, student_id, term_id):
 @csrf_exempt
 def answer_poll_view(request, student_id):
     pass
+
+
+@csrf_exempt
+def get_student_report_view(request, student_id):
+    query = '''SELCET * FROM get_student_course_report(%s)''' % (student_id)
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(query)
+            report = get_results(cursor)
+        except Exception as ex:
+            return JsonResponse({}, safe=False, status=400)
+    return JsonResponse(report, safe=False)
