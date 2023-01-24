@@ -66,3 +66,15 @@ def delete_section(request, student_section_id):
 
     return JsonResponse({}, safe=False)
 
+
+@csrf_exempt
+def get_department_average(request, department, term_id):
+    query = '''SELECT * FROM get_department_average(%s, %d);''' % (department, term_id)
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(query)
+            department_average = get_results(cursor)
+        except Exception as ex:
+            return JsonResponse({}, status=400)
+
+    return JsonResponse(department_average, safe=False)
