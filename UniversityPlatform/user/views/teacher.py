@@ -70,10 +70,11 @@ def get_teacher_section_view(request, teacher_id, term_id):
     return JsonResponse(teacher_sections, safe=False)
 
 
-@csrf_exempt
 def get_teacher_advisees_view(request, teacher_id):
     query = '''
-        SELECT * FROM student WHERE advisor_id=%d
+        SELECT * FROM student 
+        JOIN public.user ON public.user.id = student.user_id
+        WHERE advisor_id=%d
         ORDER BY sid DESC;
         ''' % (
         teacher_id,

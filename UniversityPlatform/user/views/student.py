@@ -36,7 +36,7 @@ def get_student_detail_view(request, student_id):
         FROM student JOIN public.user ON student.user_id=public.user.id
         WHERE student.sid=%s
     ''' % (
-        student_id,
+        student_id
     )
     with connection.cursor() as cursor:
         try:
