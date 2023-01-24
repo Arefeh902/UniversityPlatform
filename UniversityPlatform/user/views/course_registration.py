@@ -78,3 +78,16 @@ def get_department_average(request, department, term_id):
             return JsonResponse({}, status=400)
 
     return JsonResponse(department_average, safe=False)
+
+
+@csrf_exempt
+def get_department_chart_view(request, department):
+    query = '''SELECT * FROM get_chart('%s');''' % (department)
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(query)
+            chart = get_results(cursor)
+        except Exception as ex:
+            return JsonResponse({}, status=400)
+
+    return JsonResponse(chart, safe=False)
