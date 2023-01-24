@@ -30,6 +30,25 @@ def check_valid_student(token, student_id):
 
 
 @csrf_exempt
+def get_student_detail_view(request, student_id):
+    query = '''
+        SELECT *
+        FROM student JOIN public.user ON student.user_id=public.user.id
+        WHERE student.sid=%s
+    ''' % (
+        student_id,
+    )
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(query)
+            student_detail = get_results(cursor)
+        except Exception as ex:
+            return JsonResponse({}, status=400)
+
+    return JsonResponse(student_detail, safe=False)
+
+
+@csrf_exempt
 def get_student_term_view(request, student_id):
     query = '''
     SELECT *
