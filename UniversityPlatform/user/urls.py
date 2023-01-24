@@ -28,5 +28,6 @@ urlpatterns = [
    path('section/<int:section_id>/create-exam-poll/', create_exam_poll_view),
 
    path('department/all', get_all_departments),
+   path('department/<str:department>/term/<int:term_id>/average/', get_department_average),
    path('section/<int:term_id>/<str:department>/all', get_all_sections_of_departments_in_term),
 ]
