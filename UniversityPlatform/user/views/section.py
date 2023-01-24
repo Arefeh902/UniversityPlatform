@@ -87,11 +87,11 @@ def get_section_students_view(request, section_id):
     with connection.cursor() as cursor:
         try:
             cursor.execute(query)
-            requests = get_results(cursor)
+            students = get_results(cursor)
         except Exception as ex:
             return JsonResponse({}, status=400)
 
-    return JsonResponse(requests)
+    return JsonResponse(students, safe=False)
 
 
 @csrf_exempt
