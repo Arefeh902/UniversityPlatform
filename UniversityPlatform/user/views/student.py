@@ -52,7 +52,7 @@ def get_student_term_view(request, student_id):
 @csrf_exempt
 def get_student_section_view(request, student_id, term_id):
     query = '''
-    SELECT *
+    SELECT section.*, course.name as course_name, course.department, course.credit
     FROM student__section JOIN section ON student__section.section_id=section.id
     JOIN course ON course.id=section.course_id
     WHERE student_id=%d AND section.term_id=%d;
