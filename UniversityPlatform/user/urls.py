@@ -18,6 +18,7 @@ urlpatterns = [
    path('teacher/<int:teacher_id>/terms/', get_teacher_terms_view),
    path('teacher/<int:teacher_id>/section/<int:term_id>/', get_teacher_section_view),
    path('teacher/<int:teacher_id>/get-students/', get_teacher_advisees_view),
+   path('teacher/<int:teacher_id>/deadline/<int:term_id>/', get_teacher_deadlines_view),
 
    path('section/<int:section_id>/detail/', get_section_detail_view),
    path('section/<int:section_id>/practice-class-request/all/', get_section_practice_class_request_view),
