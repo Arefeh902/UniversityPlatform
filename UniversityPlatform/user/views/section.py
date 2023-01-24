@@ -100,7 +100,8 @@ def get_section_practice_class_request_view(request, section_id):
     query = '''
         SELECT * 
         FROM practice_class_request JOIN student ON practice_class_request.student_id=student.sid
-        WHERE practice_class_request.section_id=%d;
+        WHERE practice_class_request.section_id=%d
+        ORDER BY practice_class_request.id DESC;
         ''' % (
         section_id
     )
@@ -115,11 +116,11 @@ def get_section_practice_class_request_view(request, section_id):
 
 
 @csrf_exempt
-def set_practice_class_request_status_view(request, request_id):
+def set_practice_class_request_status_view(request, section_id, request_id):
     data = json.loads(request.body)
     query = '''
         UPDATE practice_class_request 
-        SET status=%d WHERE id=%d;
+        SET status='%s' WHERE id=%d;
         ''' % (
         data.get('status'),
         request_id
