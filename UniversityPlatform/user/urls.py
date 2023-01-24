@@ -23,7 +23,7 @@ urlpatterns = [
 
    path('section/<int:section_id>/detail/', get_section_detail_view),
    path('section/<int:section_id>/practice-class-request/all/', get_section_practice_class_request_view),
-   path('section/<int:section_id>/practice-class-request/set-status/', set_practice_class_request_status_view),
+   path('section/<int:section_id>/practice-class-request/<int:request_id>/set-status/', set_practice_class_request_status_view),
    path('section/<int:section_id>/students/', get_section_students_view),
    path('section/<int:section_id>/create-exam-poll/', create_exam_poll_view),
 
