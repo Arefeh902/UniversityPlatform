@@ -134,14 +134,57 @@ def get_student_deadlines_view(request, student_id, term_id):
 
 @csrf_exempt
 def get_student_report_view(request, student_id):
-    query = '''SELCET * FROM get_student_course_report(%s)''' % (student_id)
+    student_terms_query = '''
+    SELECT *
+    FROM student__term JOIN term ON student__term.term_id=term.id
+    WHERE student__term.student_id=%d
+    ORDER BY term.start_date DESC;
+    ''' % (
+        student_id,
+    )
+
+    student_data_query = '''SELECT * FROM student WHERE student.sid=%d''' % (student_id)
+
     with connection.cursor() as cursor:
         try:
-            cursor.execute(query)
-            report = get_results(cursor)
+            cursor.execute(student_terms_query)
+            student_terms = get_results(cursor)
+
+            cursor.execute(student_data_query)
+            student_data = get_results(cursor)[0]
+            
+            department = student_data.get('department')
+
+            result = []
+
+            for term in student_terms:
+                tmp_result = {
+                    'term_id': term.get('id'),
+                    'term_title': term.get('title'),
+                }
+
+                term_id = term.get('id')
+                student_report_query = '''SELECT * FROM get_student_courses_report_by_term(%d, %d)''' % (student_id, term_id)
+                department_avg_query = '''SELECT * FROM get_department_average('%s', %d);''' % (department, term_id)
+
+                cursor.execute(student_report_query)
+                student_reports = get_results(cursor)
+
+                cursor.execute(department_avg_query)
+                department_avg_data = get_results(cursor)
+
+                tmp_result['courses'] = student_reports
+                tmp_result['department_avg'] = department_avg_data[0].get('avg') if len(department_avg_data) > 0 else ''
+                scores = list(map(lambda x: x.get('mark'), student_reports))
+                tmp_result['student_avg'] = sum(scores) / len(scores) if len(scores) > 0 else ''
+
+                result.append(tmp_result)
+
+
         except Exception as ex:
             return JsonResponse({}, safe=False, status=400)
-    return JsonResponse(report, safe=False)
+
+    return JsonResponse(result, safe=False)
 
 
 @csrf_exempt
