@@ -73,17 +73,17 @@ def get_student_section_view(request, student_id, term_id):
 @csrf_exempt
 def create_practice_class_request_view(request, student_id, section_id):
     query = '''
-    INSERT INTO practice_class_request (student_id, section_id, status\
-                VALUES (%d, %d, %s);
+    INSERT INTO practice_class_request (student_id, section_id)
+                VALUES (%d, %d);
     ''' % (
         student_id,
-        section_id,
-        "Pending"
+        section_id
     )
     with connection.cursor() as cursor:
         try:
             cursor.execute(query)
         except Exception as ex:
+            print(ex)
             return JsonResponse({}, status=400)
 
     return JsonResponse({}, safe=False)
