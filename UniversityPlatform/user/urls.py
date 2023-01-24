@@ -15,6 +15,8 @@ urlpatterns = [
    path('student/<int:student_id>/practice-class-request/<int:section_id>/', get_practice_class_request_view),
    path('student/<int:student_id>/deadline/<int:term_id>/', get_student_deadlines_view),
    path('student/<int:student_id>/report/', get_student_report_view),
+   path('student/<int:student_id>/course-registration/<int:term_id>/<str:department>/',
+        get_student_course_registration_in_department_sections),
 
    path('teacher/<int:teacher_id>/terms/', get_teacher_terms_view),
    path('teacher/<int:teacher_id>/section/<int:term_id>/', get_teacher_section_view),
@@ -26,9 +28,9 @@ urlpatterns = [
    path('section/<int:section_id>/practice-class-request/<int:request_id>/set-status/', set_practice_class_request_status_view),
    path('section/<int:section_id>/students/', get_section_students_view),
    path('section/<int:section_id>/create-exam-poll/', create_exam_poll_view),
+   path('section/<int:term_id>/<str:department>/all', get_all_sections_of_departments_in_term),
 
    path('department/all', get_all_departments),
    path('department/<str:department>/term/<int:term_id>/average/', get_department_average),
-   path('section/<int:term_id>/<str:department>/all', get_all_sections_of_departments_in_term),
-   path('chart/<str:department>/', get_department_chart_view)
+   path('department/<str:department>/chart', get_department_chart_view),
 ]

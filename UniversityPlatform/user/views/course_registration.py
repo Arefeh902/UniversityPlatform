@@ -1,7 +1,6 @@
 from django.http import JsonResponse, Http404
 from django.db import connection
 from django.views.decorators.csrf import csrf_exempt
-import json
 
 
 def get_results(cursor):
@@ -34,6 +33,19 @@ def get_all_sections_of_departments_in_term(request, term_id, department):
             term_id,
             department,
             )
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(query)
+            sections = get_results(cursor)
+        except Exception as ex:
+            return JsonResponse({}, status=400)
+
+    return JsonResponse(sections, safe=False)
+
+
+@csrf_exempt
+def get_student_course_registration_in_department_sections(request, student_id, term_id, department):
+    query = '''SELECT * FROM get_student_course_registration_sections(%d, %d, '%s');''' % (student_id, term_id, department)
     with connection.cursor() as cursor:
         try:
             cursor.execute(query)
