@@ -51,4 +51,18 @@ def select_section(request, student_id, section_id):
 
 @csrf_exempt
 def delete_section(request, student_section_id):
-    pass
+    query = '''
+              DELETE
+              FROM student__section 
+              WHERE id=%d;
+              ''' % (
+        student_section_id
+    )
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(query)
+        except Exception as ex:
+            return JsonResponse({}, status=400)
+
+    return JsonResponse({}, safe=False)
+

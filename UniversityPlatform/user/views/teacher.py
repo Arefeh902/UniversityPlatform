@@ -103,3 +103,25 @@ def approve_course_registration(request, student_section_id):
             return JsonResponse({}, status=400)
 
     return JsonResponse({}, safe=False)
+
+
+@csrf_exempt
+def get_teacher_deadlines_view(request, teacher_id, term_id):
+    query = '''
+    SELECT course.id as course_id, course.name as course_name, exam.*  
+    FROM exam JOIN section ON exam.section_id=section.id JOIN course ON section.course_id=course.id
+    WHERE exam.section_id IN     
+    (SELECT section_id
+    FROM teacher__section JOIN section ON teacher__section.section_id=section.id
+    WHERE teacher_id=%d AND term_id =%d);
+    ''' % (
+        teacher_id,
+        term_id
+    )
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(query)
+            student_deadlines = get_results(cursor)
+        except Exception as ex:
+            return JsonResponse({}, safe=False, status=400)
+    return JsonResponse(student_deadlines, safe=False)
