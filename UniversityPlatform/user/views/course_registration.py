@@ -58,7 +58,23 @@ def get_student_course_registration_in_department_sections(request, student_id, 
 
 @csrf_exempt
 def select_section(request, student_id, section_id):
-    pass
+    query = '''
+            INSERT INTO 
+            student__section (student_id, section_id)
+            VALUES (%d, %d);
+            ''' % (
+        student_id,
+        section_id,
+    )
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(query)
+            result = get_results(cursor)
+        except Exception as ex:
+            return JsonResponse({}, status=500)
+    if len(result) == 0:
+        return JsonResponse({}, status=400)
+    return JsonResponse({}, safe=False)
 
 
 @csrf_exempt
