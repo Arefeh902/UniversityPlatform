@@ -71,9 +71,10 @@ def select_section(request, student_id, section_id):
             cursor.execute(query)
             result = get_results(cursor)
         except Exception as ex:
+            if ex.args[0][:19] == 'Intersection found!':
+                return JsonResponse({"error": "This course has intersection!"}, status=400)
             return JsonResponse({}, status=500)
-    if len(result) == 0:
-        return JsonResponse({}, status=400)
+
     return JsonResponse({}, safe=False)
 
 
