@@ -41,8 +41,9 @@ def get_section_detail_view(request, section_id):
         except Exception as ex:
             return JsonResponse({}, status=400)
     query = '''
-    SELECT *
-    FROM teacher__section
+    SELECT teacher.id AS id, public.user.first_name, public.user.last_name
+    FROM teacher__section JOIN teacher ON teacher__section.teacher_id=teacher.id
+    JOIN public.user ON public.user.id=teacher.user_id
     WHERE section_id=%d;
     ''' % (
         section_id,
@@ -156,4 +157,9 @@ def create_exam_poll_view(request, section_id):
 
 @csrf_exempt
 def add_poll_option(request, exam_poll_id):
+    pass
+
+
+@csrf_exempt
+def get_all_section_exam_polls(request, section_id):
     pass
