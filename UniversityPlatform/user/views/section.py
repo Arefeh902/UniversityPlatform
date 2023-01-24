@@ -80,6 +80,7 @@ def get_section_students_view(request, section_id):
     query = '''
             SELECT * 
             FROM student__section JOIN student ON student__section.student_id=student.sid
+            JOIN public.user ON student.user_id = public.user.id
             WHERE section_id=%d
             ''' % (
         section_id
