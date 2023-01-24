@@ -94,7 +94,8 @@ def get_practice_class_request_view(request, student_id, section_id):
     query = '''
         SELECT * 
         FROM practice_class_request
-        WHERE student_id=%d AND section_id=%d;
+        WHERE student_id=%d AND section_id=%d
+        ORDER BY id DESC;
         ''' % (
         student_id,
         section_id,
