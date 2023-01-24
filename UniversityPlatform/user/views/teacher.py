@@ -54,6 +54,7 @@ def get_teacher_section_view(request, teacher_id, term_id):
     query = '''
         SELECT *
         FROM teacher__section JOIN section ON teacher__section.section_id=section.id
+        JOIN course ON course.id=section.course_id
         WHERE teacher_id=%d AND section.term_id=%d;
         ''' % (
         teacher_id,
