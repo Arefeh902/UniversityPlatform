@@ -39,5 +39,5 @@ urlpatterns = [
 
    path('department/all', get_all_departments),
    path('department/<str:department>/term/<int:term_id>/average/', get_department_average),
-   path('department/<str:department>/chart', get_department_chart_view),
+   path('department/<str:department>/chart', get_department_chart_view)
 ]

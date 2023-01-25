@@ -119,4 +119,15 @@ def get_department_chart_view(request, department):
         except Exception as ex:
             return JsonResponse({}, status=400)
 
-    return JsonResponse(chart, safe=False)
+    vis: dict = {}
+    result: list[dict] = []
+    for course in chart:
+        if course['course_id'] not in vis:
+            vis[course['course_id']] = 1
+            new_course = course.copy()
+            new_course['pishniaz_course_term'] = []
+            for c in chart:
+                if c['course_id'] == new_course['course_id']:
+                    new_course['pishniaz_course_term'].append(c['pishniaz_course_term'])
+            result.append(new_course)
+    return JsonResponse(result, safe=False)
